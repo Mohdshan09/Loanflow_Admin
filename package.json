@@ -1,0 +1,7 @@
+{
+  "name": "loanflow-admin",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"Run frontend and backend dev servers separately\""
+  }
+}

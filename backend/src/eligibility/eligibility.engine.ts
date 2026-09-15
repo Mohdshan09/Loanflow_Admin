@@ -1,0 +1,1 @@
+// Core reusable, deterministic eligibility engine.\n
