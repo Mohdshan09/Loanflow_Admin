@@ -11,3 +11,81 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+enum EmploymentType {
+  SALARIED
+  SELF_EMPLOYED
+}
+
+enum SalaryType {
+  DAT
+  CASH
+  CHEQUE
+}
+
+enum UserStatus {
+  ACTIVE
+  REJECTED
+}
+
+enum Role {
+  ADMIN
+  VIEWER
+}
+
+model Admin {
+  id           String @id @default(uuid()) @db.Uuid
+  fullName     String
+  email        String
+  passwordHash String
+  role         Role   @default(VIEWER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id             String         @id @default(uuid()) @db.Uuid
+  fullName       String
+  dateOfBirth    DateTime
+  creditScore    Int
+  employmentType EmploymentType
+  salaryType     SalaryType
+  salary         Decimal        @db.Decimal(12, 2)
+  status         UserStatus     @default(REJECTED)
+
+  eligibleProducts UserProduct[]
+
+  createdAt DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Product {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
+
+  minAge                 Int
+  maxAge                 Int
+  minCreditScore         Int
+  allowedEmploymentTypes EmploymentType[]
+  allowedSalaryType      SalaryType[]
+  minSalary              Decimal          @db.Decimal(12, 2)
+
+  eligibleUsers UserProduct[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UserProduct {
+  userId    String @db.Uuid
+  productId String @db.Uuid
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+  @@index([productId])
+}
