@@ -1,5 +1,3 @@
-// auth/authorization.ts
-
 import { PERMISSIONS, type Permission } from "./permissions";
 import { type Role } from "./roles";
 
@@ -23,4 +21,13 @@ export const ROLE_PERMISSIONS: Record<Role, readonly Permission[]> = {
         PERMISSIONS.PRODUCT_VIEW,
         PERMISSIONS.USER_VIEW,
     ],
+};
+
+export const hasPermission = (
+    role: Role | undefined,
+    permission: Permission
+): boolean => {
+    if (!role) return false;
+
+    return ROLE_PERMISSIONS[role].includes(permission);
 };

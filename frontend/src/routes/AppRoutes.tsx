@@ -13,6 +13,7 @@ import Users from "../pages/Users/Users";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import Signup from "../pages/Signup/Signup";
+import Unauthorized from "../pages/Unauthorized/Unauthorized";
 
 const AppRoutes = () => {
     return (
@@ -24,6 +25,9 @@ const AppRoutes = () => {
                     <Route path="/signup" element={<Signup />} />
 
                 </Route>
+
+                <Route path="/unauthorized" element={<Unauthorized />} />
+
 
                 {/* Protected */}
                 <Route element={<ProtectedRoute />}>
