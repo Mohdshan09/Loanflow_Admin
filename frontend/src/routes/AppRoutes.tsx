@@ -11,15 +11,21 @@ import Products from "../pages/Products/Products";
 import Users from "../pages/Users/Users";
 
 import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
+import Signup from "../pages/Signup/Signup";
 
 const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Public routes */}
-                <Route path="/login" element={<Login />} />
+                {/* Public */}
+                <Route element={<PublicRoute />}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
 
-                {/* Protected routes */}
+                </Route>
+
+                {/* Protected */}
                 <Route element={<ProtectedRoute />}>
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/products" element={<Products />} />
