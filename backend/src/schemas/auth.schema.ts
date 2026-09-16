@@ -43,6 +43,9 @@ export const loginSchema = z.object({
             (password) => password.trim().length > 0,
             "Password cannot contain only whitespace"
         ),
+
+    rememberMe: z.boolean().default(false),
+
 });
 
 export type RegisterInput = z.infer<typeof registerSchema>

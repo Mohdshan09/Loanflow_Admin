@@ -68,7 +68,8 @@ export const login = async (input: LoginInput) => {
     const token = generateToken({
         sub: admin.id,
         role: admin.role,
-    });
+    },
+        input.rememberMe);
 
     return {
         token,

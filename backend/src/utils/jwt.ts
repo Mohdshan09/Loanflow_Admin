@@ -12,9 +12,9 @@ export interface TokenPayload {
     role: Role;
 }
 
-export const generateToken = (payload: TokenPayload): string => {
+export const generateToken = (payload: TokenPayload, rememberMe: boolean): string => {
     return jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: rememberMe ? "10d" : "1d",
     });
 };
 

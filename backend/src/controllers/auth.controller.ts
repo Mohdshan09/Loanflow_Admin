@@ -1,6 +1,6 @@
-import { Request, Response } from "express"
-import { loginSchema, registerSchema } from "@/schemas/auth.schema.js"
-import * as authService from "@/services/auth.service.js"
+import { Request, Response } from "express";
+import { loginSchema, registerSchema } from "@/schemas/auth.schema.js";
+import * as authService from "@/services/auth.service.js";
 
 export const register = async (req: Request, res: Response) => {
     const result = registerSchema.safeParse(req.body);
@@ -21,7 +21,10 @@ export const register = async (req: Request, res: Response) => {
         });
 
     } catch (error) {
-        if (error instanceof Error && error.message == "EMAIL_ALREADY_EXISTS") {
+        if (
+            error instanceof Error &&
+            error.message === "EMAIL_ALREADY_EXISTS"
+        ) {
             return res.status(409).json({
                 message: "An account with this email already exists",
             });
@@ -32,12 +35,11 @@ export const register = async (req: Request, res: Response) => {
         return res.status(500).json({
             message: "Internal server error",
         });
-
     }
-}
+};
 
 export const login = async (req: Request, res: Response) => {
-    const result = loginSchema.safeParse(req.body)
+    const result = loginSchema.safeParse(req.body);
 
     if (!result.success) {
         return res.status(400).json({
@@ -50,12 +52,21 @@ export const login = async (req: Request, res: Response) => {
         const data = await authService.login(result.data);
 
         return res.status(200).json({
-            message: "Login Successful",
-            ...data
-        })
+            message: "Login successful",
+            ...data,
+        });
+
     } catch (error) {
+        console.error("Login error:", error);
+
         return res.status(401).json({
             message: "Invalid email or password",
         });
     }
-}
+};
+
+export const logout = async (_req: Request, res: Response) => {
+    return res.status(200).json({
+        message: "Logout successful",
+    });
+};
