@@ -1,48 +1,45 @@
-import {
-    BrowserRouter,
-    Navigate,
-    Route,
-    Routes,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import AdminLayout from "../components/layouts/AdminLayout";
+import AdminLayout from '../components/layouts/AdminLayout';
 
-import Login from "../pages/Login/Login";
-import Dashboard from "../pages/Dashboard/Dashboard";
-import Products from "../pages/Products/Products";
-import Users from "../pages/Users/Users";
+import Login from '../pages/Login/Login';
+import Dashboard from '../pages/Dashboard/Dashboard';
+import Products from '../pages/Products/Products';
+import Users from '../pages/Users/Users';
+import Profile from '../pages/Profile/Profile';
 
-import ProtectedRoute from "./ProtectedRoute";
-import PublicRoute from "./PublicRoute";
-import Signup from "../pages/Signup/Signup";
-import Unauthorized from "../pages/Unauthorized/Unauthorized";
+import ProtectedRoute from './ProtectedRoute';
+import PublicRoute from './PublicRoute';
+import Signup from '../pages/Signup/Signup';
+import Unauthorized from '../pages/Unauthorized/Unauthorized';
 
 const AppRoutes = () => {
-    return (
-        <BrowserRouter>
-            <Routes>
-                {/* Public routes — no layout */}
-                <Route element={<PublicRoute />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
-                </Route>
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Public routes — no layout */}
+        <Route element={<PublicRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+        </Route>
 
-                <Route path="/unauthorized" element={<Unauthorized />} />
+        <Route path="/unauthorized" element={<Unauthorized />} />
 
-                {/* Protected routes — all share one persistent AdminLayout */}
-                <Route element={<ProtectedRoute />}>
-                    <Route element={<AdminLayout />}>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/products" element={<Products />} />
-                        <Route path="/users" element={<Users />} />
-                    </Route>
-                </Route>
+        {/* Protected routes — all share one persistent AdminLayout */}
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+        </Route>
 
-                {/* Fallback */}
-                <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-        </BrowserRouter>
-    );
+        {/* Fallback */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
+  );
 };
 
 export default AppRoutes;

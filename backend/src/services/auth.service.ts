@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma.js"
-import { LoginInput, RegisterInput } from "@/schemas/auth.schema.js";
+import { LoginInput, RegisterInput, UpdateProfileInput } from "@/schemas/auth.schema.js";
 import { comparePassword, hashPassword } from "@/utils/password.js";
 import { generateToken } from "@/utils/jwt.js";
 
@@ -39,7 +39,7 @@ export const register = async (input: RegisterInput) => {
     return {
         user: {
             id: admin.id,
-            name: admin.fullName,
+            fullName: admin.fullName,
             email: admin.email,
             role: admin.role,
         },
@@ -75,10 +75,35 @@ export const login = async (input: LoginInput) => {
         token,
         user: {
             id: admin.id,
-            name: admin.fullName,
+            fullName: admin.fullName,
             email: admin.email,
             role: admin.role,
         },
     }
 
+}
+
+export const updateProfile = async (adminId: string, input: UpdateProfileInput) => {
+    const admin = await prisma.admin.update({
+        where: { id: adminId },
+        data: {
+            ...(input.fullName && { fullName: input.fullName }),
+        },
+        select: {
+            id: true,
+            fullName: true,
+            email: true,
+            role: true,
+            createdAt: true,
+        },
+    });
+
+    return {
+        user: {
+            id: admin.id,
+            fullName: admin.fullName,
+            email: admin.email,
+            role: admin.role,
+        },
+    };
 }

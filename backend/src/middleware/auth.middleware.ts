@@ -2,6 +2,17 @@ import type { Request, Response, NextFunction } from "express";
 import type { Role } from "@/generated/prisma/client.js";
 import { verifyToken } from "@/utils/jwt.js";
 
+declare global {
+    namespace Express {
+        interface Request {
+            user?: {
+                id: string;
+                role: Role;
+            };
+        }
+    }
+}
+
 export interface AuthenticatedRequest extends Request {
     user: {
         id: string;

@@ -39,10 +39,13 @@ app.get("/api/health", async (_req, res) => {
     });
 });
 
+import engineRoutes from "@/routes/engine.route.js";
+
 app.use("/api/products", productRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/engine", engineRoutes);
 
 app.use(errorHandler);
 

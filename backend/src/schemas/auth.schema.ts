@@ -50,3 +50,14 @@ export const loginSchema = z.object({
 
 export type RegisterInput = z.infer<typeof registerSchema>
 export type LoginInput = z.infer<typeof loginSchema>;
+
+export const updateProfileSchema = z.object({
+    fullName: z
+        .string()
+        .trim()
+        .min(2, "Full name must be at least 2 characters")
+        .max(100, "Full name must not exceed 100 characters")
+        .optional(),
+});
+
+export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;

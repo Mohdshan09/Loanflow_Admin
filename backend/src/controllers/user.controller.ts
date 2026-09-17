@@ -38,7 +38,7 @@ export const getUsersController = async (_req: Request, res: Response) => {
     }
 };
 
-export const getUserByIdController = async (req: Request, res: Response) => {
+export const getUserByIdController = async (req: Request<{ id: string }>, res: Response) => {
     try {
         const user = await getUserById(req.params.id);
         if (!user) {
@@ -62,7 +62,7 @@ export const getUserByIdController = async (req: Request, res: Response) => {
     }
 };
 
-export const deleteUserController = async (req: Request, res: Response) => {
+export const deleteUserController = async (req: Request<{ id: string }>, res: Response) => {
     try {
         await deleteUser(req.params.id);
         res.status(200).json({

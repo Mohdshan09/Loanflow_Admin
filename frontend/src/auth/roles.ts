@@ -1,8 +1,8 @@
 // auth/roles.ts
 
 export const ROLES = {
-    ADMIN: "ADMIN",
-    VIEWER: "VIEWER",
+  ADMIN: 'ADMIN',
+  VIEWER: 'VIEWER',
 } as const;
 
-export type Role = typeof ROLES[keyof typeof ROLES];
+export type Role = (typeof ROLES)[keyof typeof ROLES];

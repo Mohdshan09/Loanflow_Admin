@@ -1,14 +1,14 @@
-import { api } from "./axios";
+import { api } from './axios';
 
 export interface HealthResponse {
-    success: boolean;
-    api: "connected" | "disconnected";
-    database: "connected" | "disconnected";
-    uptime: number;
-    timestamp: string;
+  success: boolean;
+  api: 'connected' | 'disconnected';
+  database: 'connected' | 'disconnected';
+  uptime: number;
+  timestamp: string;
 }
 
 export const getSystemHealth = async (): Promise<HealthResponse> => {
-    const response = await api.get<HealthResponse>("/health");
-    return response.data;
+  const response = await api.get<HealthResponse>('/health');
+  return response.data;
 };
