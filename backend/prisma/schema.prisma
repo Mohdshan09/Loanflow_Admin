@@ -57,7 +57,7 @@ model User {
   eligibleProducts UserProduct[]
 
   createdAt DateTime @default(now())
-  updateAt  DateTime @updatedAt
+  updatedAt DateTime @updatedAt
 
   @@index([status])
 }
@@ -70,7 +70,7 @@ model Product {
   maxAge                 Int
   minCreditScore         Int
   allowedEmploymentTypes EmploymentType[]
-  allowedSalaryType      SalaryType[]
+  allowedSalaryTypes     SalaryType[]
   minSalary              Decimal          @db.Decimal(12, 2)
 
   eligibleUsers UserProduct[]
