@@ -37,7 +37,7 @@ Create an empty PostgreSQL database, for example `loanflow_db`, before running m
 
    ```env
    DATABASE_URL="postgresql://postgres:your-password@localhost:5432/loanflow_db"
-   PORT=8080
+   PORT=5000
    JWT_SECRET="replace-with-a-long-random-secret"
    SEED_ADMIN_EMAIL="adminflow1024@gmail.com"
    SEED_ADMIN_PASSWORD="AdminFlow@1024"
@@ -46,7 +46,7 @@ Create an empty PostgreSQL database, for example `loanflow_db`, before running m
 3. Create `frontend/.env` so the web app points to the API.
 
    ```env
-   VITE_API_URL=http://localhost:8080/api
+   VITE_API_URL=http://localhost:5000/api
    ```
 
 4. Generate Prisma's client, apply the database migrations, and seed the admin account.
@@ -67,7 +67,7 @@ cd backend
 npm run dev
 ```
 
-The API runs at `http://localhost:8080`; its health endpoint is `http://localhost:8080/api/health`.
+The API runs at `http://localhost:5000`; its health endpoint is `http://localhost:5000/api/health`.
 
 Start the frontend in a second terminal:
 
@@ -88,6 +88,10 @@ After running the seed command with the example environment values, sign in with
 | Password | `AdminFlow@1024` |
 
 These are local development credentials only. Change `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD`, and `JWT_SECRET` for any shared or deployed environment.
+
+## Password resets
+
+Use **Forgot password?** on the sign-in screen. Reset tokens expire after 15 minutes. During local development, the API returns the token to the frontend so no email service is required. In production, the API intentionally does not return a token; connect `POST /api/auth/forgot-password` to an email provider that sends a reset link containing the token.
 
 ## Useful commands
 

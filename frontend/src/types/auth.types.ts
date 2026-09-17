@@ -29,3 +29,8 @@ export interface AuthResponse {
     role: 'ADMIN' | 'VIEWER';
   };
 }
+
+export interface ForgotPasswordResponse {
+  message: string;
+  resetToken?: string;
+}

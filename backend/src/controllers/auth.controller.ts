@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { loginSchema, registerSchema, updateProfileSchema } from "@/schemas/auth.schema.js";
+import {
+    forgotPasswordSchema,
+    loginSchema,
+    registerSchema,
+    resetPasswordSchema,
+    updateProfileSchema,
+} from "@/schemas/auth.schema.js";
 import * as authService from "@/services/auth.service.js";
 
 
@@ -98,5 +104,54 @@ export const updateProfile = async (req: Request, res: Response) => {
         return res.status(500).json({
             message: "Internal server error",
         });
+    }
+};
+
+export const forgotPassword = async (req: Request, res: Response) => {
+    const result = forgotPasswordSchema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.status(400).json({
+            message: "Validation failed",
+            errors: result.error.flatten(),
+        });
+    }
+
+    try {
+        const resetToken = await authService.requestPasswordReset(result.data);
+
+        return res.status(200).json({
+            message: "If an account exists for that email, a password reset link has been created.",
+            ...(process.env.NODE_ENV !== "production" && resetToken ? { resetToken } : {}),
+        });
+    } catch (error) {
+        console.error("Forgot password error:", error);
+        return res.status(500).json({ message: "Unable to request a password reset" });
+    }
+};
+
+export const resetPassword = async (req: Request, res: Response) => {
+    const result = resetPasswordSchema.safeParse(req.body);
+
+    if (!result.success) {
+        return res.status(400).json({
+            message: "Validation failed",
+            errors: result.error.flatten(),
+        });
+    }
+
+    try {
+        await authService.resetPassword(result.data);
+        return res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+        if (
+            error instanceof Error &&
+            (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError")
+        ) {
+            return res.status(400).json({ message: "Invalid or expired reset token" });
+        }
+
+        console.error("Reset password error:", error);
+        return res.status(500).json({ message: "Unable to reset password" });
     }
 };

@@ -61,3 +61,26 @@ export const updateProfileSchema = z.object({
 });
 
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>;
+
+export const forgotPasswordSchema = z.object({
+    email: z.string().trim().min(1, "Email is required").pipe(z.email("Invalid email address")),
+});
+
+export const resetPasswordSchema = z.object({
+    token: z.string().min(1, "Reset token is required"),
+    password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .max(72, "Password must not exceed 72 characters")
+        .refine(
+            (password) => password.trim().length > 0,
+            "Password cannot contain only whitespace"
+        )
+        .regex(
+            /[^A-Za-z0-9\s]/,
+            "Password must contain at least one special character"
+        ),
+});
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;

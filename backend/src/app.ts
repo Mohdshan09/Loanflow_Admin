@@ -10,7 +10,13 @@ import { prisma } from "./lib/prisma.js";
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(
+    cors({
+        origin: process.env.CORS_ORIGIN ?? "http://localhost:5173",
+        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allowedHeaders: ["Content-Type", "Authorization"],
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

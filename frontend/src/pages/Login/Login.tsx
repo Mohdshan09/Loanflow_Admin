@@ -113,15 +113,12 @@ const Login = () => {
                   PASSWORD
                 </label>
 
-                <button
-                  type="button"
+                <Link
+                  to="/forgot-password"
                   className="text-xs font-medium text-blue-600 transition hover:text-blue-700"
-                  onClick={() => {
-                    toast('Password reset is not available yet.');
-                  }}
                 >
                   Forgot password?
-                </button>
+                </Link>
               </div>
 
               <div className="relative">

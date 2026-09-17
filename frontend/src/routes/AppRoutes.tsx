@@ -12,6 +12,7 @@ import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
 import Signup from '../pages/Signup/Signup';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
+import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 
 const AppRoutes = () => {
   return (
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
 
         <Route path="/unauthorized" element={<Unauthorized />} />

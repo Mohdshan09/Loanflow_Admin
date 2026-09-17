@@ -1,7 +1,17 @@
 import { prisma } from "@/lib/prisma.js"
-import { LoginInput, RegisterInput, UpdateProfileInput } from "@/schemas/auth.schema.js";
+import type {
+    ForgotPasswordInput,
+    LoginInput,
+    RegisterInput,
+    ResetPasswordInput,
+    UpdateProfileInput,
+} from "@/schemas/auth.schema.js";
 import { comparePassword, hashPassword } from "@/utils/password.js";
-import { generateToken } from "@/utils/jwt.js";
+import {
+    generatePasswordResetToken,
+    generateToken,
+    verifyPasswordResetToken,
+} from "@/utils/jwt.js";
 
 export const register = async (input: RegisterInput) => {
     const existingAdmin = await prisma.admin.findUnique({
@@ -106,4 +116,27 @@ export const updateProfile = async (adminId: string, input: UpdateProfileInput) 
             role: admin.role,
         },
     };
-}
+};
+
+export const requestPasswordReset = async (input: ForgotPasswordInput) => {
+    const admin = await prisma.admin.findUnique({
+        where: { email: input.email },
+        select: { id: true },
+    });
+
+    if (!admin) {
+        return null;
+    }
+
+    return generatePasswordResetToken(admin.id);
+};
+
+export const resetPassword = async (input: ResetPasswordInput) => {
+    const payload = verifyPasswordResetToken(input.token);
+    const passwordHash = await hashPassword(input.password);
+
+    await prisma.admin.update({
+        where: { id: payload.sub },
+        data: { passwordHash },
+    });
+};
