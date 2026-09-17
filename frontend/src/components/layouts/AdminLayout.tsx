@@ -1,29 +1,25 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
 
-interface AdminLayoutProps {
-    children: ReactNode;
-}
-
-const AdminLayout = ({ children }: AdminLayoutProps) => {
+/**
+ * AdminLayout renders ONCE as a router layout route.
+ * Sidebar and Topbar are persistent — only the <Outlet> content swaps
+ * when navigating between /dashboard, /products, /users.
+ */
+const AdminLayout = () => {
     return (
-        <div className="min-h-screen bg-slate-50">
-            {/* Fixed Sidebar */}
-            <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r bg-white lg:block">
-                <Sidebar />
-            </aside>
+        <div className="flex h-screen overflow-hidden bg-slate-50">
+            {/* Fixed sidebar — always mounted, never re-renders on route change */}
+            <Sidebar />
 
-            {/* Main Area */}
-            <div className="min-h-screen lg:ml-64">
-                {/* Topbar */}
-                <header className="h-16 border-b bg-white">
-                    <Topbar />
-                </header>
+            {/* Right column: topbar + scrollable page content */}
+            <div className="flex flex-1 flex-col overflow-hidden">
+                <Topbar />
 
-                {/* Scrollable page content */}
-                <main className="p-4 lg:p-6">
-                    {children}
+                {/* Scrollable main area */}
+                <main className="flex-1 overflow-y-auto p-6">
+                    <Outlet />
                 </main>
             </div>
         </div>

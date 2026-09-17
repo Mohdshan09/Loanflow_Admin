@@ -5,6 +5,8 @@ import {
     Routes,
 } from "react-router-dom";
 
+import AdminLayout from "../components/layouts/AdminLayout";
+
 import Login from "../pages/Login/Login";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Products from "../pages/Products/Products";
@@ -19,29 +21,28 @@ const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
-                {/* Public */}
+                {/* Public routes — no layout */}
                 <Route element={<PublicRoute />}>
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
-
                 </Route>
 
                 <Route path="/unauthorized" element={<Unauthorized />} />
 
-
-                {/* Protected */}
+                {/* Protected routes — all share one persistent AdminLayout */}
                 <Route element={<ProtectedRoute />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/users" element={<Users />} />
+                    <Route element={<AdminLayout />}>
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/users" element={<Users />} />
+                    </Route>
                 </Route>
 
-                {/* Unknown route */}
+                {/* Fallback */}
                 <Route path="*" element={<Navigate to="/login" replace />} />
-
             </Routes>
         </BrowserRouter>
-    )
-}
+    );
+};
 
 export default AppRoutes;

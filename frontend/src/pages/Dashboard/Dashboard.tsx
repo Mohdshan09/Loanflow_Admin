@@ -1,6 +1,4 @@
-import AdminLayout from "../../components/layouts/AdminLayout";
 import SystemStatusBar from "../../components/layouts/SystemStatusBar";
-
 import DashboardStats from "../../components/dashboard/DashboardStats";
 import EligibilityOverview from "../../components/dashboard/EligibilityOverview";
 import QuickActions from "../../components/dashboard/QuickActions";
@@ -10,31 +8,44 @@ import { useAuthStore } from "../../stores/auth.store";
 import { PERMISSIONS } from "../../auth/permissions";
 import { hasPermission } from "../../auth/authorization";
 import { Navigate } from "react-router-dom";
+import { useDashboardStats } from "../../hooks/useDashboard";
 
 const Dashboard = () => {
     const role = useAuthStore((state) => state.user?.role);
+    const { data, isPending } = useDashboardStats();
+
+    const stats = data?.data;
 
     if (!hasPermission(role, PERMISSIONS.DASHBOARD_VIEW)) {
         return <Navigate to="/unauthorized" replace />;
     }
 
     return (
-        <AdminLayout>
-
+        <div className="space-y-5">
+            {/* System health bar */}
             <SystemStatusBar />
 
-            <DashboardStats />
+            {/* Stat cards */}
+            <DashboardStats stats={stats} isLoading={isPending} />
 
-            <div className="grid gap-4 xl:grid-cols-[1.4fr_1fr]">
-                <EligibilityOverview />
+            {/* Eligibility overview + Quick actions */}
+            <div className="grid gap-5 xl:grid-cols-[1.4fr_1fr]">
+                <EligibilityOverview stats={stats} isLoading={isPending} />
                 <QuickActions />
             </div>
 
-            <div className="mt-5 grid gap-4 xl:grid-cols-2">
-                <RecentProducts />
-                <RecentEvaluations />
+            {/* Recent products + Recent evaluations */}
+            <div className="grid gap-5 xl:grid-cols-2">
+                <RecentProducts
+                    products={stats?.recentProducts}
+                    isLoading={isPending}
+                />
+                <RecentEvaluations
+                    evaluations={stats?.recentEvaluations}
+                    isLoading={isPending}
+                />
             </div>
-        </AdminLayout>
+        </div>
     );
 };
 
