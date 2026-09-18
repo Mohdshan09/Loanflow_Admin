@@ -1,6 +1,10 @@
 import { Cpu, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { simulateRun } from '../../api/engine.api';
+import { useAuthStore } from '../../stores/auth.store';
+import { hasPermission } from '../../auth/authorization';
+import { PERMISSIONS } from '../../auth/permissions';
+import AuditLogsModal from './AuditLogsModal';
 
 /**
  * Shown at the bottom of the Products page.
@@ -9,6 +13,9 @@ import { simulateRun } from '../../api/engine.api';
 const AlgorithmicScoringBar = () => {
   const [isSimulating, setIsSimulating] = useState(false);
   const [result, setResult] = useState<{ durationMs: number } | null>(null);
+  const [isAuditLogsOpen, setIsAuditLogsOpen] = useState(false);
+  const role = useAuthStore((state) => state.user?.role);
+  const canSimulate = hasPermission(role, PERMISSIONS.ENGINE_SIMULATE);
 
   const handleSimulate = async () => {
     setIsSimulating(true);
@@ -37,8 +44,7 @@ const AlgorithmicScoringBar = () => {
             Algorithmic Scoring Engine <span className="font-normal text-slate-500">v2.4</span>
           </p>
           <p className="mt-0.5 text-xs text-slate-500">
-            When eligibility criteria update, applicant evaluation caches purge and recompute in
-            under 120ms.
+            Eligibility is recalculated automatically when rules change.
           </p>
         </div>
       </div>
@@ -52,23 +58,29 @@ const AlgorithmicScoringBar = () => {
           </span>
         )}
 
-        <button
-          type="button"
-          className="inline-flex h-8 items-center rounded-lg border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300"
-        >
-          Audit Logs
-        </button>
+        {canSimulate && (
+          <button
+            type="button"
+            onClick={() => setIsAuditLogsOpen(true)}
+            className="inline-flex h-8 items-center rounded-lg border border-slate-200 bg-white px-3.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 hover:border-slate-300"
+          >
+            Audit Logs
+          </button>
+        )}
 
-        <button
-          type="button"
-          onClick={handleSimulate}
-          disabled={isSimulating}
-          className="inline-flex h-8 items-center gap-2 rounded-lg bg-blue-600 px-3.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
-        >
-          {isSimulating ? <Loader2 size={14} className="animate-spin" /> : null}
-          {isSimulating ? 'Running...' : 'Simulate Run'}
-        </button>
+        {canSimulate && (
+          <button
+            type="button"
+            onClick={handleSimulate}
+            disabled={isSimulating}
+            className="inline-flex h-8 items-center gap-2 rounded-lg bg-blue-600 px-3.5 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:opacity-50"
+          >
+            {isSimulating ? <Loader2 size={14} className="animate-spin" /> : null}
+            {isSimulating ? 'Running...' : 'Simulate Run'}
+          </button>
+        )}
       </div>
+      <AuditLogsModal isOpen={isAuditLogsOpen} onClose={() => setIsAuditLogsOpen(false)} />
     </div>
   );
 };

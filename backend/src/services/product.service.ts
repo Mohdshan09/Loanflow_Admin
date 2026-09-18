@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma.js";
+import { EvaluationTrigger } from "@/generated/prisma/client.js";
 import { recalculateAllUsers } from "../eligibility/eligibility.service.js";
 import type { CreateProductInput, UpdateProductInput } from "../schemas/product.schema.js";
 
@@ -16,7 +17,7 @@ export const createProducts = async (data: CreateProductInput) => {
         },
     })
 
-    await recalculateAllUsers();
+    await recalculateAllUsers(EvaluationTrigger.PRODUCT_CREATED);
 
     return product
 }
@@ -105,7 +106,7 @@ export const updateProduct = async (
         data: updatedData,
     });
 
-    await recalculateAllUsers();
+    await recalculateAllUsers(EvaluationTrigger.PRODUCT_UPDATED);
 
     return product;
 };
@@ -123,7 +124,7 @@ export const deleteProduct = async (id: string) => {
         where: { id },
     });
 
-    await recalculateAllUsers();
+    await recalculateAllUsers(EvaluationTrigger.PRODUCT_DELETED);
 
     return {
         message: "Product deleted successfully",

@@ -177,13 +177,6 @@ const Login = () => {
             </button>
           </form>
 
-          {/* Signup */}
-          <p className="mt-4 text-center text-sm text-slate-500">
-            Don't have an account?{' '}
-            <Link to="/signup" className="font-medium text-blue-600 hover:text-blue-700">
-              Create an account
-            </Link>
-          </p>
         </div>
 
         {/* Security footer */}

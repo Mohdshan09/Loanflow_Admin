@@ -1,9 +1,10 @@
-import { UserStatus } from "@/generated/prisma/client.js";
+import { EvaluationTrigger, UserStatus } from "@/generated/prisma/client.js";
 import { prisma } from "@/lib/prisma.js";
 import { evaluateUserAgainstAllProducts } from "./eligibility.engine.js";
 
 export const recalculateUserEligibility = async (
-    userId: string
+    userId: string,
+    trigger: EvaluationTrigger
 ) => {
     return prisma.$transaction(async (tx) => {
         const user = await tx.user.findUnique({
@@ -57,6 +58,24 @@ export const recalculateUserEligibility = async (
             },
         });
 
+        await tx.eligibilityEvaluation.create({
+            data: {
+                userId: user.id,
+                trigger,
+                results: {
+                    create: result.results.map((item) => ({
+                        productId: item.product.id,
+                        productName: item.product.name,
+                        eligible: item.eligible,
+                        reasons: item.reasons,
+                        decisionNote: item.eligible
+                            ? "Accepted because all eligibility criteria are satisfied."
+                            : `Rejected because: ${item.reasons.join("; ")}.`,
+                    })),
+                },
+            },
+        });
+
         return {
             status,
             results: result.results,
@@ -64,7 +83,7 @@ export const recalculateUserEligibility = async (
     })
 }
 
-export const recalculateAllUsers = async () => {
+export const recalculateAllUsers = async (trigger: EvaluationTrigger) => {
     let successful = 0;
     let failed = 0;
     let total = 0;
@@ -98,7 +117,7 @@ export const recalculateAllUsers = async () => {
 
         for (const user of users) {
             try {
-                await recalculateUserEligibility(user.id);
+                await recalculateUserEligibility(user.id, trigger);
                 successful++;
             } catch (error) {
                 failed++;

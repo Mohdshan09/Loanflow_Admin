@@ -2,25 +2,7 @@
 
 import type { Product, User } from "@/generated/prisma/client.js";
 import type { EligibilityResult, UserEligibilityResult } from "./eligibility.types.js";
-
-const calculateAge = (dateOfBirth: Date): number => {
-    const today = new Date();
-
-    let age = today.getFullYear() - dateOfBirth.getFullYear();
-
-    const hasBirthdayPassed =
-        today.getMonth() > dateOfBirth.getMonth() ||
-        (
-            today.getMonth() === dateOfBirth.getMonth() &&
-            today.getDate() >= dateOfBirth.getDate()
-        );
-
-    if (!hasBirthdayPassed) {
-        age--;
-    }
-
-    return age;
-};
+import { calculateAge } from "./eligibility.utils.js";
 
 export const evaluateUserAgainstProduct = (
     user: User,

@@ -22,12 +22,12 @@ export interface RegisterRequest {
 export interface AuthResponse {
   message: string;
   token: string;
-  user: {
-    id: string;
-    fullName: string;
-    email: string;
-    role: 'ADMIN' | 'VIEWER';
-  };
+  user: AuthUser;
+}
+
+export interface AccountResponse {
+  message: string;
+  user: AuthUser;
 }
 
 export interface ForgotPasswordResponse {

@@ -33,6 +33,15 @@ enum Role {
   VIEWER
 }
 
+enum EvaluationTrigger {
+  USER_CREATED
+  USER_UPDATED
+  PRODUCT_CREATED
+  PRODUCT_UPDATED
+  PRODUCT_DELETED
+  MANUAL_SIMULATION
+}
+
 model Admin {
   id           String @id @default(uuid()) @db.Uuid
   fullName     String
@@ -55,11 +64,38 @@ model User {
   status         UserStatus     @default(REJECTED)
 
   eligibleProducts UserProduct[]
+  evaluations      EligibilityEvaluation[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([status])
+}
+
+model EligibilityEvaluation {
+  id        String            @id @default(uuid()) @db.Uuid
+  userId    String            @db.Uuid
+  trigger   EvaluationTrigger
+  createdAt DateTime          @default(now())
+
+  user    User                       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  results EligibilityEvaluationResult[]
+
+  @@index([userId, createdAt])
+}
+
+model EligibilityEvaluationResult {
+  id           String   @id @default(uuid()) @db.Uuid
+  evaluationId String   @db.Uuid
+  productId    String   @db.Uuid
+  productName  String
+  eligible     Boolean
+  reasons      String[]
+  decisionNote String
+
+  evaluation EligibilityEvaluation @relation(fields: [evaluationId], references: [id], onDelete: Cascade)
+
+  @@index([evaluationId])
 }
 
 model Product {

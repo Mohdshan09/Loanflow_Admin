@@ -34,6 +34,30 @@ export interface CreateUserInput {
   salary: number;
 }
 
+export type UpdateUserInput = Partial<CreateUserInput>;
+
+export type EvaluationTrigger =
+  | 'USER_CREATED'
+  | 'USER_UPDATED'
+  | 'PRODUCT_CREATED'
+  | 'PRODUCT_UPDATED'
+  | 'PRODUCT_DELETED'
+  | 'MANUAL_SIMULATION';
+
+export interface EvaluationHistoryItem {
+  id: string;
+  trigger: EvaluationTrigger;
+  createdAt: string;
+  results: Array<{
+    id: string;
+    productId: string;
+    productName: string;
+    eligible: boolean;
+    reasons: string[];
+    decisionNote: string;
+  }>;
+}
+
 export interface UsersResponse {
   success: boolean;
   data: User[];

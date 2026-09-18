@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Users, LogOut } from 'lucide-react';
+import { LayoutDashboard, Package, Users, LogOut, ShieldCheck } from 'lucide-react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/auth.store';
 
@@ -62,6 +62,7 @@ const Sidebar = () => {
         />
 
         <NavItem to="/users" icon={<Users size={16} strokeWidth={2} />} label="Users" />
+        {isAdmin && <NavItem to="/staff" icon={<ShieldCheck size={16} strokeWidth={2} />} label="Staff Access" />}
       </nav>
 
       {/* ── User / Logout ──────────────────────────── */}

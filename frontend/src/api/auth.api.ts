@@ -1,6 +1,7 @@
 import { api } from './axios';
 import type {
   AuthResponse,
+  AccountResponse,
   ForgotPasswordResponse,
   LoginRequest,
   RegisterRequest,
@@ -12,14 +13,14 @@ export const login = async (data: LoginRequest): Promise<AuthResponse> => {
   return response.data;
 };
 
-export const register = async (data: RegisterRequest): Promise<AuthResponse> => {
-  const response = await api.post<AuthResponse>('/auth/register', data);
+export const register = async (data: RegisterRequest): Promise<AccountResponse> => {
+  const response = await api.post<AccountResponse>('/auth/register', data);
 
   return response.data;
 };
 
-export const updateProfile = async (data: { fullName: string }): Promise<AuthResponse> => {
-  const response = await api.put<AuthResponse>('/auth/profile', data);
+export const updateProfile = async (data: { fullName: string }): Promise<AccountResponse> => {
+  const response = await api.put<AccountResponse>('/auth/profile', data);
   return response.data;
 };
 

@@ -6,6 +6,10 @@ interface Props {
 }
 
 const Actions = ({ onView, onEdit, onDelete }: Props) => {
+  const role = useAuthStore((state) => state.user?.role);
+  const canEdit = hasPermission(role, PERMISSIONS.PRODUCT_UPDATE);
+  const canDelete = hasPermission(role, PERMISSIONS.PRODUCT_DELETE);
+
   return (
     <div className="flex items-center justify-end gap-3">
       <button
@@ -16,23 +20,30 @@ const Actions = ({ onView, onEdit, onDelete }: Props) => {
         View
       </button>
 
-      <button
-        type="button"
-        onClick={onEdit}
-        className="text-xs font-semibold text-slate-600 transition hover:text-slate-900 hover:underline"
-      >
-        Edit
-      </button>
+      {canEdit && (
+        <button
+          type="button"
+          onClick={onEdit}
+          className="text-xs font-semibold text-slate-600 transition hover:text-slate-900 hover:underline"
+        >
+          Edit
+        </button>
+      )}
 
-      <button
-        type="button"
-        onClick={onDelete}
-        className="text-xs font-semibold text-rose-500 transition hover:text-rose-700 hover:underline"
-      >
-        Delete
-      </button>
+      {canDelete && (
+        <button
+          type="button"
+          onClick={onDelete}
+          className="text-xs font-semibold text-rose-500 transition hover:text-rose-700 hover:underline"
+        >
+          Delete
+        </button>
+      )}
     </div>
   );
 };
 
 export default Actions;
+import { useAuthStore } from '../../stores/auth.store';
+import { hasPermission } from '../../auth/authorization';
+import { PERMISSIONS } from '../../auth/permissions';

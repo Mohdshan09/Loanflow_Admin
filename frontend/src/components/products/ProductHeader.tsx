@@ -1,5 +1,7 @@
 import { Grid3X3, Plus } from 'lucide-react';
 import { useAuthStore } from '../../stores/auth.store';
+import { hasPermission } from '../../auth/authorization';
+import { PERMISSIONS } from '../../auth/permissions';
 
 interface ProductHeaderProps {
   onAddProduct?: () => void;
@@ -9,6 +11,7 @@ interface ProductHeaderProps {
 const ProductHeader = ({ onAddProduct, onRuleMatrix }: ProductHeaderProps) => {
   const user = useAuthStore((state) => state.user);
   const isAdmin = user?.role === 'ADMIN';
+  const canCreateProduct = hasPermission(user?.role, PERMISSIONS.PRODUCT_CREATE);
   const roleLabel = isAdmin ? 'ADMIN' : 'VIEWER';
 
   return (
@@ -45,14 +48,16 @@ const ProductHeader = ({ onAddProduct, onRuleMatrix }: ProductHeaderProps) => {
           Rule Matrix
         </button>
 
-        <button
-          type="button"
-          onClick={onAddProduct}
-          className="inline-flex h-9 items-center gap-2 rounded-lg bg-blue-600 px-3.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-        >
-          <Plus size={14} strokeWidth={2.5} />
-          Add Product
-        </button>
+        {canCreateProduct && (
+          <button
+            type="button"
+            onClick={onAddProduct}
+            className="inline-flex h-9 items-center gap-2 rounded-lg bg-blue-600 px-3.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          >
+            <Plus size={14} strokeWidth={2.5} />
+            Add Product
+          </button>
+        )}
       </div>
     </div>
   );

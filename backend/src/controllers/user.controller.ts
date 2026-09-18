@@ -3,6 +3,8 @@ import {
     createUser,
     getUsers,
     getUserById,
+    getUserEvaluationHistory,
+    updateUser,
     deleteUser,
 } from "../services/user.service.js";
 
@@ -19,6 +21,25 @@ export const createUserController = async (req: Request, res: Response) => {
             success: false,
             message: error.message || "Failed to create user",
         });
+    }
+};
+
+export const getUserEvaluationHistoryController = async (
+    req: Request<{ id: string }>,
+    res: Response
+) => {
+    try {
+        const user = await getUserById(req.params.id);
+        if (!user) {
+            res.status(404).json({ success: false, message: "User not found" });
+            return;
+        }
+
+        const history = await getUserEvaluationHistory(req.params.id);
+        res.status(200).json({ success: true, data: history });
+    } catch (error) {
+        console.error("Get user evaluation history error:", error);
+        res.status(500).json({ success: false, message: "Failed to fetch evaluation history" });
     }
 };
 
@@ -59,6 +80,21 @@ export const getUserByIdController = async (req: Request<{ id: string }>, res: R
             success: false,
             message: "Failed to fetch user",
         });
+    }
+};
+
+export const updateUserController = async (req: Request<{ id: string }>, res: Response) => {
+    try {
+        const result = await updateUser(req.params.id, req.body);
+        res.status(200).json({ success: true, data: result });
+    } catch (error) {
+        if (error instanceof Error && error.message === "USER_NOT_FOUND") {
+            res.status(404).json({ success: false, message: "User not found" });
+            return;
+        }
+
+        console.error("Update user error:", error);
+        res.status(500).json({ success: false, message: "Failed to update user" });
     }
 };
 

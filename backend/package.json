@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "build:deploy": "npm run build && npm run db:deploy",
+    "db:deploy": "prisma migrate deploy && prisma db seed",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

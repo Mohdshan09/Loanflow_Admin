@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getUsers, getUserById, createUser, deleteUser } from '../api/user.api';
-import type { CreateUserInput } from '../types/user.types';
+import { getUsers, getUserById, createUser, updateUser, deleteUser } from '../api/user.api';
+import type { CreateUserInput, UpdateUserInput } from '../types/user.types';
 
 export const useUsers = () => {
   return useQuery({
@@ -32,6 +32,17 @@ export const useDeleteUser = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteUser(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+    },
+  });
+};
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: UpdateUserInput }) => updateUser(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });

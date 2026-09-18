@@ -78,6 +78,22 @@ npm run dev
 
 Open the Vite URL printed in the terminal (usually `http://localhost:5173`).
 
+## Production deployment
+
+Configure `DATABASE_URL`, `JWT_SECRET`, `CORS_ORIGIN`, `SEED_ADMIN_EMAIL`, and
+`SEED_ADMIN_PASSWORD` as protected environment variables in your hosting provider.
+Do not commit them to the repository.
+
+For the backend deployment build command, use:
+
+```bash
+npm run build:deploy
+```
+
+It compiles the API, applies pending Prisma migrations, then runs the admin seed.
+The seed is idempotent: it creates the configured administrator only when that email
+does not already exist, so subsequent deployments do not overwrite the account or password.
+
 ## Development login
 
 After running the seed command with the example environment values, sign in with:

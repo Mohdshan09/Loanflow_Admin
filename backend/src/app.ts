@@ -4,6 +4,8 @@ import authRoutes from "@/routes/auth.routes.js";
 import productRoutes from "@/routes/product.route.js";
 import dashboardRoutes from "@/routes/dashboard.route.js";
 import userRoutes from "@/routes/user.route.js";
+import staffRoutes from "@/routes/staff.route.js";
+import auditRoutes from "@/routes/audit.route.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { prisma } from "./lib/prisma.js";
 
@@ -52,6 +54,8 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/engine", engineRoutes);
+app.use("/api/staff", staffRoutes);
+app.use("/api/audit-logs", auditRoutes);
 
 app.use(errorHandler);
 

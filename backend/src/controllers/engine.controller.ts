@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
+import { EvaluationTrigger } from "@/generated/prisma/client.js";
 import { recalculateAllUsers } from "@/eligibility/eligibility.service.js";
 
 export const simulateRunController = async (_req: Request, res: Response) => {
     try {
         const start = performance.now();
-        const result = await recalculateAllUsers();
+        const result = await recalculateAllUsers(EvaluationTrigger.MANUAL_SIMULATION);
         const end = performance.now();
         const durationMs = end - start;
 

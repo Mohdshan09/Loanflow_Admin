@@ -15,13 +15,7 @@ export const useLogin = () => {
 };
 
 export const useRegister = () => {
-  const setAuth = useAuthStore((state) => state.login);
-
   return useMutation({
     mutationFn: register,
-
-    onSuccess: (data) => {
-      setAuth(data.token, data.user, false);
-    },
   });
 };

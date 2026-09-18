@@ -13,6 +13,9 @@ import ViewProductModal from './ViewProductModal';
 import EditProductModal from './EditProductModal';
 import DeleteProductModal from './DeleteProductModal';
 import { useProducts } from '../../hooks/useProduct';
+import { useAuthStore } from '../../stores/auth.store';
+import { hasPermission } from '../../auth/authorization';
+import { PERMISSIONS } from '../../auth/permissions';
 
 const COLS = [
   'Product Name',
@@ -31,6 +34,8 @@ interface ProductTableProps {
 
 const ProductTable = ({ products: propProducts }: ProductTableProps) => {
   const { data, isPending, isError, refetch } = useProducts();
+  const role = useAuthStore((state) => state.user?.role);
+  const canEdit = hasPermission(role, PERMISSIONS.PRODUCT_UPDATE);
 
   const [selectedForView, setSelectedForView] = useState<ProductType | null>(null);
   const [selectedForEdit, setSelectedForEdit] = useState<ProductType | null>(null);
@@ -185,7 +190,7 @@ const ProductTable = ({ products: propProducts }: ProductTableProps) => {
         product={selectedForView}
         isOpen={Boolean(selectedForView)}
         onClose={() => setSelectedForView(null)}
-        onEdit={(p) => setSelectedForEdit(p)}
+        onEdit={canEdit ? (p) => setSelectedForEdit(p) : undefined}
       />
 
       {/* Edit Product Modal */}

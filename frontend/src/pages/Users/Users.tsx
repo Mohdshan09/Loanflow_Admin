@@ -5,15 +5,22 @@ import {
   Plus,
   Search,
   RefreshCw,
+  Pencil,
   Trash2,
   CheckCircle2,
   XCircle,
   Briefcase,
+  History,
 } from 'lucide-react';
 import { useUsers, useDeleteUser } from '../../hooks/useUser';
 import AddUserModal from '../../components/users/AddUserModal';
+import EditUserModal from '../../components/users/EditUserModal';
+import EvaluationHistoryModal from '../../components/users/EvaluationHistoryModal';
 import type { User } from '../../types/user.types';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '../../stores/auth.store';
+import { hasPermission } from '../../auth/authorization';
+import { PERMISSIONS } from '../../auth/permissions';
 
 const EMPTY_USERS: User[] = [];
 
@@ -33,6 +40,13 @@ const Users = () => {
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'ACTIVE' | 'REJECTED'>('ALL');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  const [userHistory, setUserHistory] = useState<User | null>(null);
+  const role = useAuthStore((state) => state.user?.role);
+  const canCreateUser = hasPermission(role, PERMISSIONS.USER_CREATE);
+  const canUpdateUser = hasPermission(role, PERMISSIONS.USER_UPDATE);
+  const canDeleteUser = hasPermission(role, PERMISSIONS.USER_DELETE);
+  const canManageUsers = canUpdateUser || canDeleteUser;
 
   const { data, isPending, isError, refetch } = useUsers();
   const { mutateAsync: deleteUser, isPending: isDeleting } = useDeleteUser();
@@ -81,14 +95,16 @@ const Users = () => {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          className="inline-flex h-9 items-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-        >
-          <Plus size={15} strokeWidth={2.5} />
-          Add Applicant
-        </button>
+        {canCreateUser && (
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className="inline-flex h-9 items-center gap-2 rounded-lg bg-blue-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+          >
+            <Plus size={15} strokeWidth={2.5} />
+            Add Applicant
+          </button>
+        )}
       </div>
 
       {/* Quick Stats */}
@@ -235,7 +251,7 @@ const Users = () => {
                 ? 'No applicants match your search criteria.'
                 : 'Add your first applicant to evaluate eligibility against configured products.'}
             </p>
-            {!search && (
+            {!search && canCreateUser && (
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(true)}
@@ -257,7 +273,7 @@ const Users = () => {
                   <th className="px-5 py-3 text-left">Salary</th>
                   <th className="px-5 py-3 text-left">Eligibility</th>
                   <th className="px-5 py-3 text-left">Qualified Products</th>
-                  <th className="px-5 py-3 text-right">Action</th>
+                  {canManageUsers && <th className="px-5 py-3 text-right">Action</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -372,19 +388,40 @@ const Users = () => {
                             ))}
                           </div>
                         )}
+                        <button
+                          type="button"
+                          onClick={() => setUserHistory(user)}
+                          className="mt-1 flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:text-blue-800"
+                        >
+                          <History size={12} /> View history
+                        </button>
                       </td>
 
                       {/* Action */}
-                      <td className="px-5 py-3.5 text-right">
-                        <button
-                          type="button"
-                          onClick={() => setUserToDelete(user)}
-                          className="rounded-lg p-1.5 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
-                          title="Delete applicant"
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </td>
+                      {canManageUsers && (
+                        <td className="px-5 py-3.5 text-right">
+                          {canUpdateUser && (
+                            <button
+                              type="button"
+                              onClick={() => setUserToEdit(user)}
+                              className="mr-1 rounded-lg p-1.5 text-slate-400 transition hover:bg-blue-50 hover:text-blue-600"
+                              title="Edit applicant"
+                            >
+                              <Pencil size={15} />
+                            </button>
+                          )}
+                          {canDeleteUser && (
+                            <button
+                              type="button"
+                              onClick={() => setUserToDelete(user)}
+                              className="rounded-lg p-1.5 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
+                              title="Delete applicant"
+                            >
+                              <Trash2 size={15} />
+                            </button>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   );
                 })}
@@ -395,10 +432,20 @@ const Users = () => {
       </div>
 
       {/* Add User Modal */}
-      <AddUserModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      {canCreateUser && (
+        <AddUserModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      )}
+      {canUpdateUser && (
+        <EditUserModal
+          key={userToEdit?.id ?? 'no-selected-user'}
+          user={userToEdit}
+          onClose={() => setUserToEdit(null)}
+        />
+      )}
+      <EvaluationHistoryModal user={userHistory} onClose={() => setUserHistory(null)} />
 
       {/* Delete Confirmation Dialog */}
-      {userToDelete && (
+      {canDeleteUser && userToDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4">
           <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl border border-slate-100">
             <h3 className="text-base font-bold text-slate-900">Delete Applicant</h3>

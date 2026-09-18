@@ -7,10 +7,10 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import Products from '../pages/Products/Products';
 import Users from '../pages/Users/Users';
 import Profile from '../pages/Profile/Profile';
+import Staff from '../pages/Staff/Staff';
 
 import ProtectedRoute from './ProtectedRoute';
 import PublicRoute from './PublicRoute';
-import Signup from '../pages/Signup/Signup';
 import Unauthorized from '../pages/Unauthorized/Unauthorized';
 import ForgotPassword from '../pages/ForgotPassword/ForgotPassword';
 
@@ -21,7 +21,6 @@ const AppRoutes = () => {
         {/* Public routes — no layout */}
         <Route element={<PublicRoute />}>
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
         </Route>
 
@@ -34,6 +33,7 @@ const AppRoutes = () => {
             <Route path="/products" element={<Products />} />
             <Route path="/users" element={<Users />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/staff" element={<Staff />} />
           </Route>
         </Route>
 

@@ -1,4 +1,11 @@
-import type { CreateUserInput, User, UserResponse, UsersResponse } from '../types/user.types';
+import type {
+  CreateUserInput,
+  EvaluationHistoryItem,
+  UpdateUserInput,
+  User,
+  UserResponse,
+  UsersResponse,
+} from '../types/user.types';
 import { api } from './axios';
 
 export const getUsers = async (): Promise<UsersResponse> => {
@@ -13,6 +20,20 @@ export const getUserById = async (id: string): Promise<{ success: boolean; data:
 
 export const createUser = async (data: CreateUserInput): Promise<UserResponse> => {
   const response = await api.post<UserResponse>('/users', data);
+  return response.data;
+};
+
+export const updateUser = async (id: string, data: UpdateUserInput): Promise<UserResponse> => {
+  const response = await api.patch<UserResponse>(`/users/${id}`, data);
+  return response.data;
+};
+
+export const getUserEvaluationHistory = async (
+  id: string,
+): Promise<{ success: boolean; data: EvaluationHistoryItem[] }> => {
+  const response = await api.get<{ success: boolean; data: EvaluationHistoryItem[] }>(
+    `/users/${id}/evaluation-history`,
+  );
   return response.data;
 };
 

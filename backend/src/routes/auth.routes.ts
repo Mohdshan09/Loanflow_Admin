@@ -4,7 +4,6 @@ import {
     login,
     logout,
     forgotPassword,
-    register,
     resetPassword,
     updateProfile,
 } from "@/controllers/auth.controller.js";
@@ -12,8 +11,6 @@ import {
 const router = Router();
 
 router.post("/login", login);
-
-router.post("/register", register);
 
 router.post("/forgot-password", forgotPassword);
 

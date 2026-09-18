@@ -40,14 +40,6 @@ const AddUserModal = ({ isOpen, onClose }: Props) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Calculate age for client validation
-    const birthDate = new Date(formData.dateOfBirth);
-    const age = new Date().getFullYear() - birthDate.getFullYear();
-    if (age < 18 || age > 100) {
-      toast.error('Applicant must be between 18 and 100 years old');
-      return;
-    }
-
     try {
       const response = await createUser(formData);
       toast.success('User registered and evaluated successfully!');
