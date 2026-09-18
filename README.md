@@ -94,6 +94,40 @@ It compiles the API, applies pending Prisma migrations, then runs the admin seed
 The seed is idempotent: it creates the configured administrator only when that email
 does not already exist, so subsequent deployments do not overwrite the account or password.
 
+## Deploy on Vercel
+
+Deploy the frontend and API as **two Vercel projects** from this repository. This
+keeps the React static site and the Express serverless API independently deployable.
+
+1. Create a Vercel project for the API and set its **Root Directory** to `backend`.
+   The included `backend/vercel.json` exposes the Express application through a
+   serverless function and forwards `/api/*` requests to it.
+2. Add these API environment variables in Vercel:
+
+   ```env
+   DATABASE_URL=<your-hosted-postgresql-connection-string>
+   JWT_SECRET=<long-random-secret>
+   CORS_ORIGIN=https://<your-frontend-project>.vercel.app
+   SEED_ADMIN_EMAIL=<admin-email>
+   SEED_ADMIN_PASSWORD=<strong-admin-password>
+   ```
+
+   Apply database migrations from a trusted environment with
+   `npx prisma migrate deploy`. Do not run `prisma db seed` as part of every
+   serverless build; run it once when you want to create the initial admin.
+3. Create a second Vercel project for the frontend and set its **Root Directory**
+   to `frontend`. The included `frontend/vercel.json` builds Vite and rewrites
+   client-side routes to `index.html`.
+4. Add the following frontend environment variable, replacing the value with the
+   deployed API URL:
+
+   ```env
+   VITE_API_URL=https://<your-api-project>.vercel.app/api
+   ```
+
+Redeploy the frontend after setting `VITE_API_URL`. Vite embeds this value at build
+time, so changing it requires a new frontend deployment.
+
 ## Development login
 
 After running the seed command with the example environment values, sign in with:
