@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma.js";
-import { EvaluationTrigger } from "@/generated/prisma/client.js";
+import { prisma } from "../lib/prisma.js";
+import { EvaluationTrigger } from "../generated/prisma/client.js";
 import { recalculateAllUsers } from "../eligibility/eligibility.service.js";
 import type { CreateProductInput, UpdateProductInput } from "../schemas/product.schema.js";
 

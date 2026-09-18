@@ -1,5 +1,5 @@
-import { EvaluationTrigger, UserStatus } from "@/generated/prisma/client.js";
-import { prisma } from "@/lib/prisma.js";
+import { EvaluationTrigger, UserStatus } from "../generated/prisma/client.js";
+import { prisma } from "../lib/prisma.js";
 import { evaluateUserAgainstAllProducts } from "./eligibility.engine.js";
 
 export const recalculateUserEligibility = async (

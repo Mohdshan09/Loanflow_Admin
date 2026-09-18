@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
-import { createStaffSchema } from "@/schemas/staff.schema.js";
-import { createStaff, listStaff } from "@/services/staff.service.js";
+import { createStaffSchema } from "../schemas/staff.schema.js";
+import { createStaff, listStaff } from "../services/staff.service.js";
 
 export const getStaffController = async (_req: Request, res: Response) => {
     try {

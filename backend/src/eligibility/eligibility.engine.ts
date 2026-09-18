@@ -1,6 +1,6 @@
 // Core reusable, deterministic eligibility engine.\n
 
-import type { Product, User } from "@/generated/prisma/client.js";
+import type { Product, User } from "../generated/prisma/client.js";
 import type { EligibilityResult, UserEligibilityResult } from "./eligibility.types.js";
 import { calculateAge } from "./eligibility.utils.js";
 

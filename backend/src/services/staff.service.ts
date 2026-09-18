@@ -1,6 +1,6 @@
-import { prisma } from "@/lib/prisma.js";
-import { hashPassword } from "@/utils/password.js";
-import type { CreateStaffInput } from "@/schemas/staff.schema.js";
+import { prisma } from "../lib/prisma.js";
+import { hashPassword } from "../utils/password.js";
+import type { CreateStaffInput } from "../schemas/staff.schema.js";
 
 const staffSelect = {
     id: true,

@@ -1,17 +1,17 @@
-import { prisma } from "@/lib/prisma.js"
+import { prisma } from "../lib/prisma.js"
 import type {
     ForgotPasswordInput,
     LoginInput,
     RegisterInput,
     ResetPasswordInput,
     UpdateProfileInput,
-} from "@/schemas/auth.schema.js";
-import { comparePassword, hashPassword } from "@/utils/password.js";
+} from "../schemas/auth.schema.js";
+import { comparePassword, hashPassword } from "../utils/password.js";
 import {
     generatePasswordResetToken,
     generateToken,
     verifyPasswordResetToken,
-} from "@/utils/jwt.js";
+} from "../utils/jwt.js";
 
 export const register = async (input: RegisterInput) => {
     const existingAdmin = await prisma.admin.findUnique({

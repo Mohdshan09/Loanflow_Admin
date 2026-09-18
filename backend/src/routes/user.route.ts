@@ -9,8 +9,8 @@ import {
 } from "../controllers/user.controller.js";
 import { createUserSchema, updateUserSchema } from "../schemas/user.schema.js";
 import { validate } from "../middleware/validate.middleware.js";
-import { authenticateJWT } from "@/middleware/auth.middleware.js";
-import { authorize } from "@/middleware/role.middleware.js";
+import { authenticateJWT } from "../middleware/auth.middleware.js";
+import { authorize } from "../middleware/role.middleware.js";
 
 const router = Router();
 

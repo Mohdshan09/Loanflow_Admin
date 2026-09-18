@@ -1,11 +1,11 @@
 import express from "express";
 import cors from "cors";
-import authRoutes from "@/routes/auth.routes.js";
-import productRoutes from "@/routes/product.route.js";
-import dashboardRoutes from "@/routes/dashboard.route.js";
-import userRoutes from "@/routes/user.route.js";
-import staffRoutes from "@/routes/staff.route.js";
-import auditRoutes from "@/routes/audit.route.js";
+import authRoutes from "./routes/auth.routes.js";
+import productRoutes from "./routes/product.route.js";
+import dashboardRoutes from "./routes/dashboard.route.js";
+import userRoutes from "./routes/user.route.js";
+import staffRoutes from "./routes/staff.route.js";
+import auditRoutes from "./routes/audit.route.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import { prisma } from "./lib/prisma.js";
 
@@ -54,7 +54,7 @@ app.get("/api/health", async (_req, res) => {
     });
 });
 
-import engineRoutes from "@/routes/engine.route.js";
+import engineRoutes from "./routes/engine.route.js";
 
 app.use("/api/products", productRoutes);
 app.use("/api/dashboard", dashboardRoutes);

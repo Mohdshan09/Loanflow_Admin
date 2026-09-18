@@ -6,7 +6,7 @@ import {
     forgotPassword,
     resetPassword,
     updateProfile,
-} from "@/controllers/auth.controller.js";
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
@@ -16,7 +16,7 @@ router.post("/forgot-password", forgotPassword);
 
 router.post("/reset-password", resetPassword);
 
-import { authenticateJWT } from "@/middleware/auth.middleware.js";
+import { authenticateJWT } from "../middleware/auth.middleware.js";
 
 router.post("/logout", logout);
 

@@ -1,4 +1,4 @@
-import { Product } from "@/generated/prisma/client.js";
+import { Product } from "../generated/prisma/client.js";
 
 // Types used by the eligibility engine.\n
 export interface EligibilityResult {

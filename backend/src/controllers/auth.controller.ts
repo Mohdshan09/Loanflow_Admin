@@ -5,8 +5,8 @@ import {
     registerSchema,
     resetPasswordSchema,
     updateProfileSchema,
-} from "@/schemas/auth.schema.js";
-import * as authService from "@/services/auth.service.js";
+} from "../schemas/auth.schema.js";
+import * as authService from "../services/auth.service.js";
 
 
 export const register = async (req: Request, res: Response) => {

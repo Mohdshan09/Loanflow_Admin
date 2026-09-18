@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { EvaluationTrigger } from "@/generated/prisma/client.js";
-import { recalculateAllUsers } from "@/eligibility/eligibility.service.js";
+import { EvaluationTrigger } from "../generated/prisma/client.js";
+import { recalculateAllUsers } from "../eligibility/eligibility.service.js";
 
 export const simulateRunController = async (_req: Request, res: Response) => {
     try {
