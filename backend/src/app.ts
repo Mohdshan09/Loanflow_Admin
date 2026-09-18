@@ -22,6 +22,13 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (_req, res) => {
+    res.json({
+        message: "LoanFlow API",
+        health: "/api/health",
+    });
+});
+
 // health-check endpoint
 app.get("/api", (_req, res) => {
     res.json({
