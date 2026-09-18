@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // health-check endpoint
-app.get("/", (_req, res) => {
+app.get("/api", (_req, res) => {
     res.json({
         message: "API is working !",
     });
